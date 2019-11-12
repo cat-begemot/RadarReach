@@ -23,20 +23,25 @@ namespace RadarReach
 			var minLatitude = bottomLeft.Latitude;
 			var maxLatitude = topLeft.Latitude;
 
+			// Checks radar position relative to the left side of the view area.
 			if (radar.Longitude < minLongitude)
 				return IsRadarReachIntersectsRelativeToExtremeLongitude(radar, radarReach,
 							minLatitude, maxLatitude, minLongitude);
 
+			// Checks radar position relative to the right side of the view area.
 			if (radar.Longitude > maxLongitude)
 				return IsRadarReachIntersectsRelativeToExtremeLongitude(radar, radarReach,
 							minLatitude, maxLatitude, maxLongitude);
 
+			// Checks radar position relative to the bottom side of the view area.
 			if (radar.Latitude < minLatitude)
 				return IsRadarReachIntersectsRelativeToExtremeLatitude(radar, radarReach, minLatitude);
 
+			// Checks radar position relative to the top side of the view area.
 			if (radar.Latitude > maxLatitude)
 				return IsRadarReachIntersectsRelativeToExtremeLatitude(radar, radarReach, maxLatitude);
 
+			// Checks whether radar locates in side ViewArea.
 			return IsRadarInsideViewArea(radar, minLongitude, maxLongitude, minLatitude, maxLatitude);
 		}
 
