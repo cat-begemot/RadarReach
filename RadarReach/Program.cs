@@ -12,10 +12,7 @@ namespace RadarReach
 	
 	public class Program
 	{
-		public static void Main(string[] args)
-		{
-			
-		}
+		public static void Main(string[] args) { }
 
 		public static bool IsRadarReachIntersectViewArea(Location radar, double radarReach,
 			Location topLeft, Location topRight, Location bottomLeft)
@@ -27,31 +24,31 @@ namespace RadarReach
 			var maxLatitude = topLeft.Latitude;
 
 			if (radar.Longitude < minLongitude)
-				return IsRadarReachIntersectsWhenBelowMinLongitude(radar, radarReach,
+				return IsRadarReachIntersectsRelativeToExtremeLongitude(radar, radarReach,
 							minLatitude, maxLatitude, minLongitude);
 
 			if (radar.Longitude > maxLongitude)
-				return IsRadarReachIntersectsWhenAboveMaxLongitude(radar, radarReach,
+				return IsRadarReachIntersectsRelativeToExtremeLongitude(radar, radarReach,
 							minLatitude, maxLatitude, maxLongitude);
 
 			if (radar.Latitude < minLatitude)
-				return IsRadarReachIntersectsWhenBelowMinLatitude(radar, radarReach, minLatitude);
+				return IsRadarReachIntersectsRelativeToExtremeLatitude(radar, radarReach, minLatitude);
 
 			if (radar.Latitude > maxLatitude)
-				return IsRadarReachIntersectsWhenAboveMaxLatitude(radar, radarReach, maxLatitude);
+				return IsRadarReachIntersectsRelativeToExtremeLatitude(radar, radarReach, maxLatitude);
 
 			return IsRadarInsideViewArea(radar, minLongitude, maxLongitude, minLatitude, maxLatitude);
 		}
 
-		private static bool IsRadarReachIntersectsWhenBelowMinLongitude(Location radar, double radarReach,
-			double minLatitude, double maxLatitude, double minLongitude)
+		private static bool IsRadarReachIntersectsRelativeToExtremeLongitude(Location radar, double radarReach,
+			double minLatitude, double maxLatitude, double longitude)
 		{
 			double distance;
 
 			if (radar.Latitude < minLatitude)
 			{
 				distance = CalcDistance(radar.Latitude, radar.Longitude,
-					minLatitude, minLongitude);
+					minLatitude, longitude);
 
 				return radarReach - distance > 0;
 			}
@@ -59,58 +56,22 @@ namespace RadarReach
 			if (radar.Latitude > maxLatitude)
 			{
 				distance = CalcDistance(radar.Latitude, radar.Longitude,
-					maxLatitude, minLongitude);
+					maxLatitude, longitude);
 
 				return radarReach - distance > 0;
 			}
 
 			distance = CalcDistance(radar.Latitude, radar.Longitude,
-				radar.Latitude, minLongitude);
+				radar.Latitude, longitude);
 
 			return radarReach - distance > 0;
 		}
 
-		private static bool IsRadarReachIntersectsWhenAboveMaxLongitude(Location radar, double radarReach,
-			double minLatitude, double maxLatitude, double maxLongitude)
-		{
-			double distance;
-
-			if (radar.Latitude < minLatitude)
-			{
-				distance = CalcDistance(radar.Latitude, radar.Longitude,
-					minLatitude, maxLongitude);
-
-				return radarReach - distance > 0;
-			}
-
-			if (radar.Latitude > maxLatitude)
-			{
-				distance = CalcDistance(radar.Latitude, radar.Longitude,
-					maxLatitude, maxLongitude);
-
-				return radarReach - distance > 0;
-			}
-
-			distance = CalcDistance(radar.Latitude, radar.Longitude,
-				radar.Latitude, maxLongitude);
-
-			return radarReach - distance > 0;
-		}
-
-		private static bool IsRadarReachIntersectsWhenBelowMinLatitude(Location radar, double radarReach,
-			double minLatitude)
+		private static bool IsRadarReachIntersectsRelativeToExtremeLatitude(Location radar, double radarReach,
+			double latitude)
 		{
 			var distance = CalcDistance(radar.Latitude, radar.Longitude,
-				minLatitude, radar.Longitude);
-
-			return radarReach - distance > 0;
-		}
-
-		private static bool IsRadarReachIntersectsWhenAboveMaxLatitude(Location radar, double radarReach,
-			double maxLatitude)
-		{
-			var distance = CalcDistance(radar.Latitude, radar.Longitude,
-				maxLatitude, radar.Longitude);
+				latitude, radar.Longitude);
 
 			return radarReach - distance > 0;
 		}
