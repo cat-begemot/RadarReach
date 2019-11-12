@@ -13,6 +13,7 @@ namespace RadarReachTests
 		[DataRow(-50, -70, 0, 0, 20)]
         [DataRow(70, 50, -70, -30, 45)]
         [DataRow(50, 0, 30, 0, 58)]
+        [DataRow(-70, 50, 0, 0, 120)]
         public void TestCalcDistanceMethod_UsingRoundedResult(double lon1, double lon2,
 	        double lat1, double lat2, double expectedResult)
         {

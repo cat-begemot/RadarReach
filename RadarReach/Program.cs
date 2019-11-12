@@ -43,35 +43,24 @@ namespace RadarReach
 		private static bool IsRadarReachIntersectsRelativeToExtremeLongitude(Location radar, double radarReach,
 			double minLatitude, double maxLatitude, double longitude)
 		{
-			double distance;
-
 			if (radar.Latitude < minLatitude)
-			{
-				distance = CalcDistance(radar.Latitude, radar.Longitude,
-					minLatitude, longitude);
-
-				return radarReach - distance > 0;
-			}
+				return IsRadarReachGreaterThanDistanceToViewArea(radar, radarReach, minLatitude, longitude);
 
 			if (radar.Latitude > maxLatitude)
-			{
-				distance = CalcDistance(radar.Latitude, radar.Longitude,
-					maxLatitude, longitude);
+				return IsRadarReachGreaterThanDistanceToViewArea(radar, radarReach, maxLatitude, longitude);
 
-				return radarReach - distance > 0;
-			}
-
-			distance = CalcDistance(radar.Latitude, radar.Longitude,
-				radar.Latitude, longitude);
-
-			return radarReach - distance > 0;
+			return IsRadarReachGreaterThanDistanceToViewArea(radar, radarReach, radar.Latitude, longitude);
 		}
 
-		private static bool IsRadarReachIntersectsRelativeToExtremeLatitude(Location radar, double radarReach,
-			double latitude)
+		private static bool IsRadarReachIntersectsRelativeToExtremeLatitude(Location radar,
+			double radarReach, double latitude) =>
+				IsRadarReachGreaterThanDistanceToViewArea(radar, radarReach, latitude, radar.Longitude);
+		
+		private static bool IsRadarReachGreaterThanDistanceToViewArea(Location radar, double radarReach,
+			double latitude, double longitude)
 		{
 			var distance = CalcDistance(radar.Latitude, radar.Longitude,
-				latitude, radar.Longitude);
+				latitude, longitude);
 
 			return radarReach - distance > 0;
 		}
@@ -91,8 +80,8 @@ namespace RadarReach
 		public static double CalcDistance(double latPoint1, double lonPoint1,
 			double latPoint2, double lonPoint2)
 		{
-			var longitudeProjectionLength = Math.Abs(Math.Abs(lonPoint1) - Math.Abs(lonPoint2));
-			var latitudeProjectionLength = Math.Abs(Math.Abs(latPoint1) - Math.Abs(latPoint2));
+			var longitudeProjectionLength = Math.Abs(lonPoint1 - lonPoint2);
+			var latitudeProjectionLength = Math.Abs(latPoint1 - latPoint2);
 			var distance = 
 				Math.Sqrt(Math.Pow(longitudeProjectionLength, 2) + Math.Pow(latitudeProjectionLength , 2));
 
